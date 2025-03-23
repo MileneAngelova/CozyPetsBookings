@@ -48,6 +48,21 @@ public class BookingDTO {
     public BookingDTO() {
     }
 
+    public BookingDTO(Long id, String firstName, String lastName, String email, String contactNumber, LocalDate checkIn, LocalDate checkOut, String petType, int numberOfPets, String petName, String breed, String additionalInformation) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.contactNumber = contactNumber;
+        this.checkIn = checkIn;
+        this.checkOut = checkOut;
+        this.petType = petType;
+        this.numberOfPets = numberOfPets;
+        this.petName = petName;
+        this.breed = breed;
+        this.additionalInformation = additionalInformation;
+    }
+
     public Long getId() {
         return id;
     }

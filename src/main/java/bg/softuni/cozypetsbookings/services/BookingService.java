@@ -7,51 +7,53 @@ import bg.softuni.cozypetsbookings.services.exceptions.ObjectNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class BookingService {
     private final BookingRepository bookingRepository;
     private final ModelMapper modelMapper;
-    //    private final Period retentionPeriod;
+//    private final Period retentionPeriod;
     private final static Logger LOGGER = LoggerFactory.getLogger(BookingService.class);
 
     public BookingService(BookingRepository bookingRepository
-//                          @Value("${bookings.}") Period retentionPeriod
+//                          @Value("${bookings.retention.period}")
+//                          Period retentionPeriod
     ) {
         this.bookingRepository = bookingRepository;
         this.modelMapper = new ModelMapper();
 //        this.retentionPeriod = retentionPeriod;
     }
 
-    public void makeBooking(BookingDTO addBookingDTO) {
-        LOGGER.info("Going to create new booking...");
-            Booking newBooking = this.modelMapper.map(addBookingDTO, Booking.class);
-            this.bookingRepository.save(newBooking);
+    public void makeBooking(BookingDTO addBookingDTO, String userId) {
+        Booking newBooking = this.modelMapper.map(addBookingDTO, Booking.class).setUserId(userId);
+        bookingRepository.save(newBooking);
+
+
+//        LOGGER.info("Going to create new booking...");
+//        Booking newBooking = this.modelMapper.map(addBookingDTO, Booking.class);
+//        this.bookingRepository.save(newBooking);
     }
 
-    public List<BookingDTO> getAllBookings() {
-        return bookingRepository.findAll()
-                .stream()
-                .map(booking -> modelMapper.map(booking, BookingDTO.class))
-                .collect(Collectors.toList());
-    }
+    public PagedModel<BookingDTO> getAllBookings(Pageable pageable) {
+        return new PagedModel<>(bookingRepository
+                .findAll(pageable)
+                .map(BookingService::mapToDTO));
 
-//@PreAuthorize("@bookingService.isOwner(#userDetails, bookingId")
+    }
+//    public List<BookingDTO> getAllBookings() {
+//        return bookingRepository.findAll()
+//                .stream()
+//                .map(booking -> modelMapper.map(booking, BookingDTO.class))
+//                .collect(Collectors.toList());
+//}
+
     public void cancelBooking(Long bookingId) {
         this.bookingRepository.deleteById(bookingId);
     }
 
-    //    public void CleanOldBookings() {
-//        Instant now = Instant.now();
-//        Instant before = now.minus(retentionPeriod);
-//        LOGGER.info("Removing all bookings older than " + before);
-//        bookingRepository.deleteOldBookings(before);
-//        LOGGER.info("Old bookings were removed");
-//    }
     public BookingDTO getBookingById(Long id) {
         return this.bookingRepository
                 .findById(id)
@@ -59,19 +61,29 @@ public class BookingService {
                 .orElseThrow(ObjectNotFoundException::new);
     }
 
-    private static Booking mapToBooking(BookingDTO addBookingDTO) {
-        return new Booking()
-                .setId(addBookingDTO.getId())
-                .setBreed(addBookingDTO.getBreed())
-                .setEmail(addBookingDTO.getEmail())
-                .setAdditionalInformation(addBookingDTO.getAdditionalInformation())
-                .setCheckIn(addBookingDTO.getCheckIn())
-                .setCheckOut(addBookingDTO.getCheckOut())
-                .setContactNumber(addBookingDTO.getContactNumber())
-                .setFirstName(addBookingDTO.getFirstName())
-                .setLastName(addBookingDTO.getLastName())
-                .setNumberOfPets(addBookingDTO.getNumberOfPets())
-                .setPetName(addBookingDTO.getPetName())
-                .setPetType(addBookingDTO.getPetType());
+//    public void deleteOldBookings() {
+//        Instant now = Instant.now();
+//        Instant deleteBefore = now.minus(retentionPeriod);
+//        LOGGER.info("Removing all offers older than " + deleteBefore);
+//        bookingRepository.deleteOldBookings(deleteBefore);
+//        LOGGER.info("Old orders were removed");
+//    }
+
+    private static BookingDTO mapToDTO(Booking booking) {
+        return new BookingDTO(
+                booking.getId(),
+                booking.getFirstName(),
+                booking.getLastName(),
+                booking.getEmail(),
+                booking.getContactNumber(),
+                booking.getCheckIn(),
+                booking.getCheckOut(),
+                booking.getPetType(),
+                booking.getNumberOfPets(),
+                booking.getPetName(),
+                booking.getBreed(),
+                booking.getAdditionalInformation()
+        );
     }
+
 }

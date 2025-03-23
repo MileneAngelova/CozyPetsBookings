@@ -44,6 +44,8 @@ public class Booking {
     @Column(name = "additional_information")
     private String additionalInformation;
 
+    private String userId;
+
     public Booking() {
     }
 
@@ -152,6 +154,15 @@ public class Booking {
 
     public Booking setAdditionalInformation(String additionalInformation) {
         this.additionalInformation = additionalInformation;
+        return this;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public Booking setUserId(String userId) {
+        this.userId = userId;
         return this;
     }
 }

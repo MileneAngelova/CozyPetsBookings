@@ -9,9 +9,9 @@ spring:
     open-in-view: 'false'
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/cozy_pets_bookings?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
     username: ${db_username}
     password: ${db_password}
-    url: jdbc:mysql://localhost:3306/cozy_pets_bookings?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
   sql:
     init:
       mode: never
@@ -25,5 +25,10 @@ logging:
       nodeValue: WARN
     blog: WARN
 server:
-  port: 8081
+ port: 8081
+
+bookings.retention.period: P300D
+
+jwt:
+  secret: ${JWT_KEY:ntPHxykAkDpPDR1K3lMEkAaWzAwP0nFSThiASB}
 
