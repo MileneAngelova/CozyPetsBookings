@@ -1,11 +1,14 @@
 package bg.softuni.cozypetsbookings.models.dtos;
+
 import jakarta.validation.constraints.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 public class BookingDTO {
     private Long id;
+    private UUID uuid;
     @NotBlank(message = "Please enter your first name!")
     private String firstName;
 
@@ -45,11 +48,14 @@ public class BookingDTO {
     @Size(max = 2000)
     private String additionalInformation;
 
+    private Long userId;
+
     public BookingDTO() {
     }
 
-    public BookingDTO(Long id, String firstName, String lastName, String email, String contactNumber, LocalDate checkIn, LocalDate checkOut, String petType, int numberOfPets, String petName, String breed, String additionalInformation) {
+    public BookingDTO(Long id, UUID uuid, String firstName, String lastName, String email, String contactNumber, LocalDate checkIn, LocalDate checkOut, String petType, int numberOfPets, String petName, String breed, String additionalInformation) {
         this.id = id;
+        this.uuid = uuid;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -164,6 +170,29 @@ public class BookingDTO {
 
     public BookingDTO setAdditionalInformation(String additionalInformation) {
         this.additionalInformation = additionalInformation;
+        return this;
+    }
+
+    public BookingDTO setId(Long id) {
+        this.id = id;
+        return this;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public BookingDTO setUserId(Long userId) {
+        this.userId = userId;
+        return this;
+    }
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public BookingDTO setUuid(UUID uuid) {
+        this.uuid = uuid;
         return this;
     }
 }

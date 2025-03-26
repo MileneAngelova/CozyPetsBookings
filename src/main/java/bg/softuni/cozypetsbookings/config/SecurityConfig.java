@@ -23,7 +23,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         authorize ->
                                 authorize
-                                        .requestMatchers(HttpMethod.GET, "/bookings/**", "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
+                                        .requestMatchers(HttpMethod.GET, "/bookings/**", "/bookings/user/{userId}", "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
                                         .requestMatchers(HttpMethod.GET, "/bookings/all").hasRole("ADMIN")
                                         .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()
                                         .anyRequest().authenticated()

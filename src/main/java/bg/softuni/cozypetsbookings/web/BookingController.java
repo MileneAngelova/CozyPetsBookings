@@ -19,6 +19,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/bookings")
 @Tag(name = "Bookings",
@@ -46,7 +48,6 @@ public class BookingController {
 
     @GetMapping("/all")
     public ResponseEntity<PagedModel<BookingDTO>> getAllBookings(
-            @AuthenticationPrincipal UserDetails userDetails,
             @PageableDefault(
                     size = 5,
                     sort = "id",
@@ -60,10 +61,9 @@ public class BookingController {
     @Operation(security = @SecurityRequirement(name = "bearer-token"))
     @PostMapping
     public ResponseEntity<BookingDTO> makeReservation(
-            @RequestBody BookingDTO bookingDTO,
-            @AuthenticationPrincipal UserDetails userDetails) {
+            @RequestBody BookingDTO bookingDTO) {
 
-        this.bookingService.makeBooking(bookingDTO, userDetails.getUsername());
+        this.bookingService.makeBooking(bookingDTO);
         return ResponseEntity.created(
                 ServletUriComponentsBuilder
                         .fromCurrentRequest()
@@ -71,6 +71,12 @@ public class BookingController {
                         .buildAndExpand(bookingDTO)
                         .toUri()
         ).body(bookingDTO);
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<List<BookingDTO>> getUserBookings(@AuthenticationPrincipal UserDetails userDetails) {
+        List<BookingDTO> userBookings = bookingService.getUserBookings(userDetails.getUsername());
+        return ResponseEntity.ok(userBookings);
     }
 
     @Operation(security = @SecurityRequirement(name = "bearer-token"))

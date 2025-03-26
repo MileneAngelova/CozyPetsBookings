@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class BookingService {
     private final BookingRepository bookingRepository;
@@ -27,14 +29,9 @@ public class BookingService {
 //        this.retentionPeriod = retentionPeriod;
     }
 
-    public void makeBooking(BookingDTO addBookingDTO, String userId) {
-        Booking newBooking = this.modelMapper.map(addBookingDTO, Booking.class).setUserId(userId);
+    public void makeBooking(BookingDTO addBookingDTO) {
+        Booking newBooking = this.modelMapper.map(addBookingDTO, Booking.class);
         bookingRepository.save(newBooking);
-
-
-//        LOGGER.info("Going to create new booking...");
-//        Booking newBooking = this.modelMapper.map(addBookingDTO, Booking.class);
-//        this.bookingRepository.save(newBooking);
     }
 
     public PagedModel<BookingDTO> getAllBookings(Pageable pageable) {
@@ -43,12 +40,14 @@ public class BookingService {
                 .map(BookingService::mapToDTO));
 
     }
-//    public List<BookingDTO> getAllBookings() {
-//        return bookingRepository.findAll()
-//                .stream()
-//                .map(booking -> modelMapper.map(booking, BookingDTO.class))
-//                .collect(Collectors.toList());
-//}
+
+    public List<BookingDTO> getUserBookings(String email) {
+        return bookingRepository
+                .findByEmail(email)
+                .stream()
+                .map(booking -> modelMapper.map(booking, BookingDTO.class))
+                .toList();
+    }
 
     public void cancelBooking(Long bookingId) {
         this.bookingRepository.deleteById(bookingId);
@@ -72,6 +71,7 @@ public class BookingService {
     private static BookingDTO mapToDTO(Booking booking) {
         return new BookingDTO(
                 booking.getId(),
+                booking.getUserId(),
                 booking.getFirstName(),
                 booking.getLastName(),
                 booking.getEmail(),
