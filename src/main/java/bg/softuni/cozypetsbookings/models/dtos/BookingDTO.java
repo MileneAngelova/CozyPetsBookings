@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public class BookingDTO {
     private Long id;
-    private UUID uuid;
+
     @NotBlank(message = "Please enter your first name!")
     private String firstName;
 
@@ -48,14 +48,13 @@ public class BookingDTO {
     @Size(max = 2000)
     private String additionalInformation;
 
-    private Long userId;
+    private UUID userId;
 
     public BookingDTO() {
     }
 
-    public BookingDTO(Long id, UUID uuid, String firstName, String lastName, String email, String contactNumber, LocalDate checkIn, LocalDate checkOut, String petType, int numberOfPets, String petName, String breed, String additionalInformation) {
+    public BookingDTO(Long id, String firstName, String lastName, String email, String contactNumber, LocalDate checkIn, LocalDate checkOut, String petType, int numberOfPets, String petName, String breed, String additionalInformation, String userId) {
         this.id = id;
-        this.uuid = uuid;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -67,6 +66,7 @@ public class BookingDTO {
         this.petName = petName;
         this.breed = breed;
         this.additionalInformation = additionalInformation;
+        this.userId = UUID.fromString(userId);
     }
 
     public Long getId() {
@@ -178,21 +178,12 @@ public class BookingDTO {
         return this;
     }
 
-    public Long getUserId() {
+    public UUID getUserId() {
         return userId;
     }
 
-    public BookingDTO setUserId(Long userId) {
+    public BookingDTO setUserId(UUID userId) {
         this.userId = userId;
-        return this;
-    }
-
-    public UUID getUuid() {
-        return uuid;
-    }
-
-    public BookingDTO setUuid(UUID uuid) {
-        this.uuid = uuid;
         return this;
     }
 }

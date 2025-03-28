@@ -3,7 +3,6 @@ package bg.softuni.cozypetsbookings.models.entities;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Entity
 @Table(name = "bookings")
@@ -45,7 +44,8 @@ public class Booking {
     @Column(name = "additional_information")
     private String additionalInformation;
 
-    private UUID userId;
+    @Column(name = "user_id")
+    private String userId;
 
     public Booking() {
     }
@@ -158,11 +158,11 @@ public class Booking {
         return this;
     }
 
-    public UUID getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public Booking setUserId(UUID userId) {
+    public Booking setUserId(String userId) {
         this.userId = userId;
         return this;
     }

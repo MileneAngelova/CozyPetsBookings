@@ -29,8 +29,8 @@ public class BookingService {
 //        this.retentionPeriod = retentionPeriod;
     }
 
-    public void makeBooking(BookingDTO addBookingDTO) {
-        Booking newBooking = this.modelMapper.map(addBookingDTO, Booking.class);
+    public void makeBooking(BookingDTO addBookingDTO, String userId) {
+        Booking newBooking = this.modelMapper.map(addBookingDTO, Booking.class).setUserId(userId);
         bookingRepository.save(newBooking);
     }
 
@@ -41,11 +41,11 @@ public class BookingService {
 
     }
 
-    public List<BookingDTO> getUserBookings(String email) {
+    public List<BookingDTO> getUserBookings(String userId) {
         return bookingRepository
-                .findByEmail(email)
+                .findByUserId(userId)
                 .stream()
-                .map(booking -> modelMapper.map(booking, BookingDTO.class))
+                .map(BookingService::mapToDTO)
                 .toList();
     }
 
@@ -71,7 +71,6 @@ public class BookingService {
     private static BookingDTO mapToDTO(Booking booking) {
         return new BookingDTO(
                 booking.getId(),
-                booking.getUserId(),
                 booking.getFirstName(),
                 booking.getLastName(),
                 booking.getEmail(),
@@ -82,7 +81,8 @@ public class BookingService {
                 booking.getNumberOfPets(),
                 booking.getPetName(),
                 booking.getBreed(),
-                booking.getAdditionalInformation()
+                booking.getAdditionalInformation(),
+                booking.getUserId()
         );
     }
 

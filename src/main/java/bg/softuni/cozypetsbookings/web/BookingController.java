@@ -16,6 +16,7 @@ import org.springframework.data.web.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -61,9 +62,10 @@ public class BookingController {
     @Operation(security = @SecurityRequirement(name = "bearer-token"))
     @PostMapping
     public ResponseEntity<BookingDTO> makeReservation(
-            @RequestBody BookingDTO bookingDTO) {
+            @RequestBody BookingDTO bookingDTO,
+            @AuthenticationPrincipal UserDetails userDetails) {
 
-        this.bookingService.makeBooking(bookingDTO);
+        this.bookingService.makeBooking(bookingDTO, userDetails.getUsername());
         return ResponseEntity.created(
                 ServletUriComponentsBuilder
                         .fromCurrentRequest()
@@ -73,12 +75,14 @@ public class BookingController {
         ).body(bookingDTO);
     }
 
+    @Transactional
     @GetMapping("/user")
     public ResponseEntity<List<BookingDTO>> getUserBookings(@AuthenticationPrincipal UserDetails userDetails) {
         List<BookingDTO> userBookings = bookingService.getUserBookings(userDetails.getUsername());
         return ResponseEntity.ok(userBookings);
     }
 
+    @Transactional
     @Operation(security = @SecurityRequirement(name = "bearer-token"))
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<BookingDTO> deleteById(@PathVariable("id") Long id) {
