@@ -7,26 +7,27 @@ import bg.softuni.cozypetsbookings.services.exceptions.ObjectNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 
 @Service
 public class BookingService {
     private final BookingRepository bookingRepository;
     private final ModelMapper modelMapper;
-//    private final Period retentionPeriod;
+    private final Period retentionPeriod;
     private final static Logger LOGGER = LoggerFactory.getLogger(BookingService.class);
 
-    public BookingService(BookingRepository bookingRepository
-//                          @Value("${bookings.retention.period}")
-//                          Period retentionPeriod
-    ) {
+    public BookingService(BookingRepository bookingRepository,
+                          @Value("${bookings.retention.period}") Period retentionPeriod) {
         this.bookingRepository = bookingRepository;
         this.modelMapper = new ModelMapper();
-//        this.retentionPeriod = retentionPeriod;
+        this.retentionPeriod = retentionPeriod;
     }
 
     public void makeBooking(BookingDTO addBookingDTO, String userId) {
@@ -60,13 +61,13 @@ public class BookingService {
                 .orElseThrow(ObjectNotFoundException::new);
     }
 
-//    public void deleteOldBookings() {
-//        Instant now = Instant.now();
-//        Instant deleteBefore = now.minus(retentionPeriod);
-//        LOGGER.info("Removing all offers older than " + deleteBefore);
-//        bookingRepository.deleteOldBookings(deleteBefore);
-//        LOGGER.info("Old orders were removed");
-//    }
+    public void deleteOldBookings() {
+        LocalDate now = LocalDate.now();
+        LocalDate deleteBefore = now.minus(retentionPeriod);
+        LOGGER.info("Removing all bookings older than " + deleteBefore);
+        bookingRepository.deleteOldBookings(deleteBefore);
+        LOGGER.info("Old bookings were removed");
+    }
 
     private static BookingDTO mapToDTO(Booking booking) {
         return new BookingDTO(

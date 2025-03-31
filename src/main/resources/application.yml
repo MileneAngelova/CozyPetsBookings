@@ -27,7 +27,7 @@ logging:
 server:
  port: 8081
 
-bookings.retention.period: P300D
+bookings.retention.period: P365D
 
 jwt:
   secret: ${JWT_KEY:ntPHxykAkDpPDR1K3lMEkAaWzAwP0nFSThiASB}
