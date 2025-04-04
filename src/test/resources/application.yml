@@ -1,0 +1,19 @@
+spring:
+  jpa:
+    defer-datasource-initialization: true
+    properties:
+      hibernate:
+        format_sql: 'FALSE'
+    hibernate:
+      ddl-auto: update
+    open-in-view: 'false'
+
+  sql:
+    init:
+      mode: never
+server:
+  port: 8081
+
+#jwt:
+#  secret: test
+

@@ -9,10 +9,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.data.web.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -48,15 +44,8 @@ public class BookingController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<PagedModel<BookingDTO>> getAllBookings(
-            @PageableDefault(
-                    size = 5,
-                    sort = "id",
-                    direction = Direction.DESC)
-            Pageable pageable) {
-
-        return ResponseEntity.ok(
-                bookingService.getAllBookings(pageable));
+    public ResponseEntity<List<BookingDTO>> getAllBookings() {
+        return ResponseEntity.ok(bookingService.getAllBookings());
     }
 
     @Operation(security = @SecurityRequirement(name = "bearer-token"))

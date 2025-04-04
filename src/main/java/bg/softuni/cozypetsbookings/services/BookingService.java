@@ -8,8 +8,6 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -30,15 +28,18 @@ public class BookingService {
         this.retentionPeriod = retentionPeriod;
     }
 
-    public void makeBooking(BookingDTO addBookingDTO, String userId) {
+    public BookingDTO makeBooking(BookingDTO addBookingDTO, String userId) {
         Booking newBooking = this.modelMapper.map(addBookingDTO, Booking.class).setUserId(userId);
         bookingRepository.save(newBooking);
+        return this.modelMapper.map(newBooking, BookingDTO.class);
     }
 
-    public PagedModel<BookingDTO> getAllBookings(Pageable pageable) {
-        return new PagedModel<>(bookingRepository
-                .findAll(pageable)
-                .map(BookingService::mapToDTO));
+    public List<BookingDTO> getAllBookings() {
+        return bookingRepository
+                .findAll()
+                .stream()
+                .map(BookingService::mapToDTO)
+                .toList();
 
     }
 

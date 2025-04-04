@@ -59,32 +59,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
     }
-
-//    @Override
-//    protected void doFilterInternal(
-//            HttpServletRequest request,
-//            HttpServletResponse response,
-//            FilterChain filterChain)
-//            throws ServletException, IOException {
-//
-//        final String authHeader = request.getHeader("Authorization");
-//
-//        if (ObjectUtils.isEmpty(authHeader) || !authHeader.startsWith("Bearer ")) {
-//            filterChain.doFilter(request, response);
-//            return;
-//        }
-//        final String jwt = authHeader.substring(7);
-//
-//        var userDetails = jwtService.extractUserInformation(jwt);
-//
-//        if (SecurityContextHolder.getContext().getAuthentication() == null) {
-//            SecurityContext context = SecurityContextHolder.createEmptyContext();
-//            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-//                    userDetails, null, userDetails.getAuthorities());
-//            authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-//            context.setAuthentication(authToken);
-//            SecurityContextHolder.setContext(context);
-//        }
-//        filterChain.doFilter(request, response);
-//    }
 }
