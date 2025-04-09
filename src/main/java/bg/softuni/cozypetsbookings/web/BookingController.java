@@ -3,10 +3,6 @@ package bg.softuni.cozypetsbookings.web;
 import bg.softuni.cozypetsbookings.models.dtos.BookingDTO;
 import bg.softuni.cozypetsbookings.services.BookingService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
@@ -27,20 +23,6 @@ public class BookingController {
 
     public BookingController(BookingService bookingService) {
         this.bookingService = bookingService;
-    }
-
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Booking details",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = BookingDTO.class))}
-            ),
-            @ApiResponse(responseCode = "404", description = "If the booking was not found",
-                    content = {@Content(mediaType = "application/json")})}
-    )
-    @GetMapping("/{id}")
-    public ResponseEntity<BookingDTO> getById(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(bookingService.getBookingById(id));
     }
 
     @GetMapping("/all")

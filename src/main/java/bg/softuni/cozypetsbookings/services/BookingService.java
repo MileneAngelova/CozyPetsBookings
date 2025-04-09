@@ -3,7 +3,6 @@ package bg.softuni.cozypetsbookings.services;
 import bg.softuni.cozypetsbookings.models.dtos.BookingDTO;
 import bg.softuni.cozypetsbookings.models.entities.Booking;
 import bg.softuni.cozypetsbookings.repositories.BookingRepository;
-import bg.softuni.cozypetsbookings.services.exceptions.ObjectNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,13 +52,6 @@ public class BookingService {
 
     public void cancelBooking(Long bookingId) {
         this.bookingRepository.deleteById(bookingId);
-    }
-
-    public BookingDTO getBookingById(Long id) {
-        return this.bookingRepository
-                .findById(id)
-                .map(booking -> modelMapper.map(booking, BookingDTO.class))
-                .orElseThrow(ObjectNotFoundException::new);
     }
 
     public void deleteOldBookings() {

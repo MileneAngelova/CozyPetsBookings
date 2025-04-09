@@ -3,12 +3,14 @@ package bg.softuni.cozypetsbookings.services;
 import bg.softuni.cozypetsbookings.models.dtos.BookingDTO;
 import bg.softuni.cozypetsbookings.models.entities.Booking;
 import bg.softuni.cozypetsbookings.repositories.BookingRepository;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.util.Collections;
@@ -26,6 +28,9 @@ public class BookingServiceTest {
     private BookingRepository bookingRepository;
     @InjectMocks
     private BookingService bookingService;
+    @Mock
+    private RestTemplate restTemplate;
+
     private static final String TEST_EMAIL = "user@example.com";
     private Booking booking;
     private BookingDTO bookingDTO;
@@ -127,4 +132,28 @@ public class BookingServiceTest {
         verify(bookingRepository, times(1)).findAll();
     }
 
+    @Test
+    void getBookingsByUserId_shouldReturnListOfBookingsDTOs() {
+        UUID userId = bookingDTO.getUserId();
+        when(bookingRepository.findByUserId(String.valueOf(userId))).thenReturn(Collections.singletonList(booking));
+
+        List<BookingDTO> result = bookingService.getUserBookings(String.valueOf(userId));
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertBookingDTOEqual(bookingDTO, result.get(0));
+        verify(bookingRepository, times(1)).findByUserId(String.valueOf(userId));
+    }
+
+//    @Test
+//    void deleteBooking_shouldDeleteBookingById() {
+//        when(bookingRepository.findById(booking.getId())).thenReturn(Optional.of(booking));
+//        doNothing().when(restTemplate).delete(any(String.class));
+//
+//        bookingService.cancelBooking(booking.getId());
+//
+//        verify(bookingRepository, times(1)).findById(booking.getId());
+//        verify(bookingRepository, times(1)).delete(booking);
+//        verify(restTemplate, times(1)).delete(any(String.class), any(String.class));
+//    }
 }

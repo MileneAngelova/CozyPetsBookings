@@ -23,7 +23,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         authorize ->
                                 authorize
-                                        .requestMatchers(HttpMethod.GET, "/bookings/**", "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
+                                        .requestMatchers(HttpMethod.GET, "/bookings/**", "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").authenticated()
                                         .requestMatchers(HttpMethod.GET, "/bookings/all").hasRole("ADMIN")
                                         .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()
                                         .anyRequest().authenticated()
@@ -48,49 +48,4 @@ public class SecurityConfig {
             }
         };
     }
-
-
-
-
-
-
-//    private final JwtAuthenticationFilter jwtAuthenticationFilter;
-//
-//    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
-//        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-//    }
-//
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(
-//            HttpSecurity httpSecurity,
-//            JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
-//        return httpSecurity
-//                .csrf(AbstractHttpConfigurer::disable)
-//                .authorizeHttpRequests(
-//                        authorize ->
-//                                authorize
-//                                        .requestMatchers(HttpMethod.GET, "/bookings/**", "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
-////                                        .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()
-//                                        .anyRequest().authenticated()
-//                )
-//                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-//                .build();
-//
-//    }
-//
-//    @Bean
-//    public AuthenticationProvider noopAuthenticationProvider() {
-//        return new AuthenticationProvider() {
-//            @Override
-//            public Authentication authenticate(Authentication authentication)
-//                    throws AuthenticationException {
-//                return null;
-//            }
-//
-//            @Override
-//            public boolean supports(Class<?> authentication) {
-//                return false;
-//            }
-//        };
-//    }
 }

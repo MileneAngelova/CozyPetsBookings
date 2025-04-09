@@ -1,8 +1,11 @@
 spring:
+  application:
+    name: cozy_pets_bookings
   jpa:
     defer-datasource-initialization: true
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
         format_sql: 'FALSE'
     hibernate:
       ddl-auto: update
@@ -10,8 +13,8 @@ spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/cozy_pets_bookings?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
-    username: ${db_username}
-    password: ${db_password}
+    username: ${MYSQL_USER:root}
+    password: ${MYSQL_PASSWORD:1221}
   sql:
     init:
       mode: never
