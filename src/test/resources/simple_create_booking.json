@@ -1,0 +1,12 @@
+{
+  "firstName" : "Petar",
+  "lastName" : "Petrov",
+  "email" : "petar@abv.bg",
+  "contactNumber" : "0888888888",
+  "checkin" : "03-09-2025",
+  "checkout" : "04-09-2025",
+  "petType" : "dog",
+  "numberOfPets" : 1,
+  "petName" : "Bobby",
+  "breed" : "Labrador"
+}

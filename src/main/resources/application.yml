@@ -5,16 +5,16 @@ spring:
     defer-datasource-initialization: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
+        dialect: org.hibernate.dialect.MySQLDialect
         format_sql: 'FALSE'
     hibernate:
       ddl-auto: update
     open-in-view: 'false'
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/cozy_pets_bookings?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
-    username: ${MYSQL_USER:root}
-    password: ${MYSQL_PASSWORD:1221}
+    url: jdbc:mysql://localhost:3306/cozy_pets_bookings?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
+    username: ${db_username}
+    password: ${db_password}
   sql:
     init:
       mode: never
@@ -25,6 +25,7 @@ logging:
         type:
           descriptor: TRACE
         SQL: DEBUG
+
       nodeValue: WARN
     blog: WARN
 server:
